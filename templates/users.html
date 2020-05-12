@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <ul>
+    {% for i in users %}
+        <li>{{ i.name }}{% if current_user.access > 0 and i != current_user %}   <a
+                href="/users?kick={{ i.id }}" style="color: darkred">Выгнать</a>{% endif %}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,6 +1,8 @@
 import datetime
 
+from flask_login import UserMixin
 from sqlalchemy import orm
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
 
@@ -16,16 +18,23 @@ class Group(db.Model):
     chats = orm.relation("Chat", back_populates='group')
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
     group = orm.relation('Group')
     name = db.Column(db.String, nullable=False)
     access = db.Column(db.Integer, default=0, nullable=False)
-    hashed_password = db.Column(db.Integer, index=True)
+    hashed_password = db.Column(db.String, index=True)
     password_time = db.Column(db.DateTime)
     subgroups = orm.relation("Subgroup", secondary="user_subgroup", backref="user")
+
+    def set_password(self, password):
+        self.hashed_password = generate_password_hash(password)
+        self.password_time = datetime.datetime.now() + datetime.timedelta(days=1)
+
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)
 
 
 class Teacher(db.Model):
@@ -69,6 +78,7 @@ class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
     group = orm.relation('Group')
+
 
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)

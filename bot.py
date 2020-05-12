@@ -1,4 +1,4 @@
-from os import getenv
+from os import getenv, urandom
 
 import sqlalchemy
 import telegram
@@ -115,6 +115,16 @@ def leave(update, context):
         print(e)
 
 
+def get_code(update, context):
+    if update['message']['chat']['type'] == 'private':
+        user = session.query(User).filter(User.id == update['message']['from_user']['id']).first()
+        if user:
+            code = urandom(8).hex()
+            user.set_password(code)
+            session.commit()
+            update.message.reply_markdown(f'Ваш код: `{code}`\nДействителен 1 день')
+
+
 def bot():
     if getenv("PROXY_URL"):
         updater = Updater(getenv('TOKEN'), use_context=True,
@@ -125,6 +135,7 @@ def bot():
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('create', create))
     dp.add_handler(CommandHandler('leave', leave))
+    dp.add_handler(CommandHandler('get_code', get_code))
     dp.add_handler(MessageHandler(Filters.text, echo))
 
     updater.start_polling()
