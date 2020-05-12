@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import orm
 
 from app import db
@@ -6,6 +8,7 @@ from app import db
 class Group(db.Model):
     __tablename__ = "groups"
     id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
+    creator_id = db.Column(db.Integer,)
     users = orm.relation("User", back_populates='group')
     teachers = orm.relation("Teacher", back_populates='group')
     lessons = orm.relation("Lesson", back_populates='group')
@@ -21,6 +24,7 @@ class User(db.Model):
     name = db.Column(db.String, nullable=False)
     access = db.Column(db.Integer, default=0, nullable=False)
     hashed_password = db.Column(db.Integer, index=True)
+    password_time = db.Column(db.DateTime)
     subgroups = orm.relation("Subgroup", secondary="user_subgroup", backref="user")
 
 
@@ -44,6 +48,7 @@ class Lesson(db.Model):
     teacher_id = db.Column(db.Integer, db.ForeignKey("teachers.id"))
     teacher = orm.relation('Teacher')
     title = db.Column(db.String, nullable=False)
+    names = db.Column(db.String)
     zoom_login = db.Column(db.Integer)
     zoom_password = db.Column(db.Integer)
     info = db.Column(db.String)
@@ -64,6 +69,10 @@ class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
     group = orm.relation('Group')
+
+class Test(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dt = db.Column(db.DateTime)
 
 
 user_subgroup = db.Table('user_subgroup', db.metadata,
