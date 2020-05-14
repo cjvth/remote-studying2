@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% set title='Учителя' %}
+{% block head %}<script src="../static/js/teachers.js"></script>{% endblock %}
+{% block content %}
+    <h2>Учителя</h2>
+    {% for i in teachers %}
+        <div class="col-md6 border rounded" id="{{ i.id }}">
+            <table style="width: 100%">
+                <tr id="{{ i.id }}-tr">
+                    <td>
+                        <h4 id="{{ i.id }}-name">{{ i.name }}</h4>
+                        {% set iinfo = i.info.split('\n') %}
+                        <p id="{{ i.id }}-info">{{ iinfo[0] }}
+                            {% for j in iinfo[1:] %}
+                                <br>{{ j }}
+                            {% endfor %}
+                        </p>
+                    </td>
+                    <td style="text-align: right; alignment: right">
+                        <button id="{{ i.id }}-edit" onclick="update_t(this.id)"
+                                class="btn btn-warning">Изменить</button>
+                        <button id="{{ i.id }}-delete" onclick="update_t(this.id)"
+                                class="btn btn-danger">Удалить</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}

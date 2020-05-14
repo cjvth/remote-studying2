@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% set title='Учителя' %}
+{% block content %}
+    <h2>Учителя</h2>
+    {% for i in teachers %}
+        <div class="col-md6 border rounded">
+            <table>
+                <tr>
+                    <td>
+                        <h4>{{ i.name }}</h4>
+                        {% set iinfo = i.info.split('\n') %}
+                        <p>{{ iinfo[0] }}
+                            {% for j in iinfo[1:] %}
+                                <br>{{ j }}
+                            {% endfor %}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}

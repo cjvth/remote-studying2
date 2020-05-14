@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from flask_login import UserMixin
 from sqlalchemy import orm
@@ -45,6 +46,9 @@ class Teacher(db.Model):
     name = db.Column(db.String, nullable=False)
     info = db.Column(db.String)
     lessons = orm.relation('Lesson', back_populates='teacher')
+
+    def __repr__(self):
+        return json.dumps({str(self.id): json.dumps({'name': self.name, 'info': self.info})})
 
 
 class Lesson(db.Model):

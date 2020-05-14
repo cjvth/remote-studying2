@@ -1,7 +1,7 @@
 import datetime
 from os import getenv
 
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash
@@ -15,6 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @app.route('/')
 def index():
@@ -67,6 +68,23 @@ def users():
         return redirect('/users')
     u = current_user.group.users
     return render_template('users.html', users=u)
+
+
+@login_required
+@app.route('/teachers')
+def teachers():
+    from table import User
+    t = current_user.group.teachers
+    if current_user.access < 1:
+        return render_template('teachers_user.html', teachers=t)
+    else:
+        return render_template('teachers_admin.html', teachers=t)
+
+
+@login_required
+@app.route('/update_db', methods=['POST'])
+def update_db():
+    return '^^'
 
 
 @login_manager.user_loader
