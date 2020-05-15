@@ -1,0 +1,13 @@
+.flexi-butt {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.btn {
+    margin: 2px;
+}
+
+input {
+    margin-bottom: 1px;
+}

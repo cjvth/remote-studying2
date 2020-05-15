@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% set title='Учителя' %}
-{% block head %}<script src="../static/js/teachers.js"></script>{% endblock %}
+{% block head %}
+    <script src="../static/teachers.js"></script>{% endblock %}
 {% block content %}
     <h2>Учителя</h2>
+    <div class="flexi-butt" style="justify-content: flex-start">
+        <button class="btn btn-success">Сохранить</button>
+        <button class="btn btn-danger">Отказаться</button>
+        <button class="btn btn-primary" onclick="new_t()" style="margin-left: auto">Добавить</button>
+    </div>
+    <div id="teachers">
     {% for i in teachers %}
         <div class="col-md6 border rounded" id="{{ i.id }}">
             <table style="width: 100%">
@@ -16,14 +23,15 @@
                             {% endfor %}
                         </p>
                     </td>
-                    <td style="text-align: right; alignment: right">
-                        <button id="{{ i.id }}-edit" onclick="update_t(this.id)"
-                                class="btn btn-warning">Изменить</button>
-                        <button id="{{ i.id }}-delete" onclick="update_t(this.id)"
-                                class="btn btn-danger">Удалить</button>
+                    <td class="flexi-butt">
+                        <button id="{{ i.id }}-edit" onclick="update_t(this.id)" class="btn btn-warning">Изменить
+                        </button>
+                        <button id="{{ i.id }}-delete" onclick="update_t(this.id)" class="btn btn-danger">Удалить
+                        </button>
                     </td>
                 </tr>
             </table>
         </div>
+    </div>
     {% endfor %}
 {% endblock %}

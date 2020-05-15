@@ -44,6 +44,8 @@ class Teacher(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
     group = orm.relation('Group')
     name = db.Column(db.String, nullable=False)
+    email = db.Column(db.String)
+    phone = db.Column(db.String)
     info = db.Column(db.String)
     lessons = orm.relation('Lesson', back_populates='teacher')
 
